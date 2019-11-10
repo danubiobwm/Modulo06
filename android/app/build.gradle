@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+
+//cod acima copy
+
+
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -81,6 +96,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -153,6 +169,11 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+        }
+        releaseStaging{
+          buildConfigField "String", "CODEPUSH_KEY", '"VhA4xi2zx7MOsXEw8WO9oNE76jGLZOtkCTyvf"'
+          matchingFallbacks=['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -160,6 +181,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"V9UUh7sRwJcwBfUeME2XTeX3cDQVgcrMJi-5S"'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -188,6 +210,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-code-push')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
